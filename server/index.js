@@ -18,7 +18,8 @@ import {
 import { conversationSchema, loginSchema, paginationSchema, parseBody, receiverSchema, registerSchema } from './validation.js';
 
 const PORT = Number(process.env.PORT || 4000);
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN;
+if (!CLIENT_ORIGIN) throw new Error('CLIENT_ORIGIN must be set');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const clientDist = path.resolve(__dirname, '../dist');
 const app = express();

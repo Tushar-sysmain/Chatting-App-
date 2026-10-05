@@ -93,4 +93,32 @@ The response includes `messageId`, `conversationId`, `senderId`, `receiverId`, `
 
 ## Production
 
-Set a high-entropy `JWT_SECRET`, use a persistent volume for `DATABASE_PATH`, serve the API behind HTTPS, set `NODE_ENV=production`, and set `CLIENT_ORIGIN` to the exact frontend origin. Do not ship `server/data/users.json` with real passwords; use registration or a one-time migration process. Run backups for the SQLite database and protect them as production secrets.
+Whisper Bloom requires a split deployment because Vercel cannot run the Express/Socket.IO/SQLite backend.
+
+### Frontend (Vercel)
+
+1. Connect your repository to Vercel
+2. Set environment variable in Vercel:
+   ```
+   VITE_SERVER_URL=https://your-backend-domain.com
+   ```
+3. Vercel auto-detects Vite and serves the built `dist/`
+
+### Backend (Render / Railway / Fly.io / VPS)
+
+Deploy `server/index.js` to a Node host with persistent storage.
+
+Required environment variables:
+```
+NODE_ENV=production
+PORT=10000
+CLIENT_ORIGIN=https://your-app.vercel.app
+JWT_SECRET=<long-random-secret-32+chars>
+DATABASE_PATH=/app/server/data/chat.sqlite
+COOKIE_SAME_SITE=none
+```
+
+Start command: `npm start`  
+Build/setup command: `npm ci && npm run db:migrate`
+
+Set a high-entropy `JWT_SECRET`, use a persistent volume for `DATABASE_PATH`, serve the API behind HTTPS, and do not ship `server/data/users.json` with real passwords. Run backups for the SQLite database and protect them as production secrets.
