@@ -1,0 +1,4 @@
+export const USERS = [
+  { id: 'priya', name: 'Priya', password: 'Game', color: '#ff7aa2', status: 'online' },
+  { id: 'amit', name: 'Amit', password: 'Game', color: '#7c9cff', status: 'online' },
+];
